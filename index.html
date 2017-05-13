@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, WebVR! - A-Frame</title>
+    <meta name="description" content="Hello, WebVR! - A-Frame">
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <video id="cityVideo" autoplay crossorigin webkit-playsinline playsinline>
+          <source class="active" src="https://ucarecdn.com/8b43a5e2-679c-4f36-9fc6-4e804ae0fac1/#t=8" />
+<!--           <source src="" /> -->
+        </video>
+      </a-assets>
+      <a-entity id="homestart">
+        <a-sky src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2FReflectionLakeMtRainier.jpg?1494687013750"></a-sky>
+        <a-plane position="0 0 0" rotation="-90 0 0" width="60" height="60" color="#7BC8A4"></a-plane>
+        <a-text position="-1 2.5 -2" color="white" value="Welcome!" scale="2 2 2"></a-text>
+        <a-text position="-1.25 2 -2" color="white" value="Where would you like to meditate today?" scale=".75 .75 .75"></a-text>
+
+        <a-entity id="sceneMenu" opacity="0" position="0 -20 0" scale="1 1 1">
+          <a-entity id="miniMt" class="menuObject" position="0 0 0" scale=".9 .75 1"> 
+            <!-- Mountains -->
+              <a-cylinder radius="1.4" height="5" position="-3.25 0 -5" opacity="0"></a-cylinder>
+              <a-cone class="mmt" scale="1 1 1" position="-3.5 0 -5" color="gray" radius-bottom="2" radius-top="0" height="3" opacity="1"></a-cone>
+              <a-cone class="mmt" scale="1 1 1" position="-2.5 0 -4.5" color="gray" radius-bottom="1" radius-top="0" height="2" opacity="1"></a-cone>
+          </a-entity>
+          
+          <a-entity id="miniTree" class="menuObject">
+            <a-cylinder radius="0.75" height="5" position="3 0 -5" opacity="0"></a-cylinder>
+            <a-sphere class="leaf" radius=".5" position="3 1.5 -5" color="green"></a-sphere>
+            <a-sphere class="leaf" radius=".5" position="2.5 1.25 -5" color="green"></a-sphere>
+            <a-sphere class="leaf" radius="0.35" position="3.25 1.3 -5" color="green"></a-sphere>
+            <a-cylinder radius="0.15" height="2" position="3 0 -5" color="brown"></a-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+      
+      
+      <a-videosphere id="videoSphere" rotation="0 180 0" opacity="0"></a-videosphere>
+      
+      <a-camera id="camera">
+        <a-cursor color="white" opacity="0"></a-cursor>
+        <a-entity id="calmSlide" position="0 -100 0" opacity="0">
+          <a-plane width="10" height="10" 
+                   rotation="-30 0 0" position=".349 -.06 -.06" 
+                   color="#7BC8A4"></a-plane>
+          <a-text rotation="-11.11 0.401 -0.057" position="-0.07 .02 -.094"  scale="0.25 0.25 0.25" 
+                  value="calm" color="#ddd"></a-text>
+        </a-entity>
+      </a-camera>
+      
+      <a-entity id="bottomMenu">
+        <!--  Clock -->
+        <a-entity clock="font: sourcecodepro; color: #191;"></a-entity>
+        <a-text position="-.75 .11 .3" rotation="-90 0 0" scale="0.4 0.4 0.4" color="gray" value="You meditated: 3 minutes"></a-text>
+        <a-text position="-.75 .11 .5" rotation="-90 0 0" scale="0.4 0.4 0.4" color="gray" value="Friend meditated: 4 minutes"></a-text>
+        
+        <a-circle id="basecircle" radius="9" color="#7BC8A4" position="0 0.1 0" rotation="-90 0 0"></a-circle>
+      </a-entity>
+    </a-scene>
+    
+    <script>
+      var openScene = function () {
+        viewingScene = true;
+        d3.select("#videoSphere")
+          .transition()
+          // .delay(1000)
+          .duration(2000)
+          .attr('src', "#cityVideo")
+          .attr('visible', true)
+          .attr('opacity', "1");
+        loadVideo();
+        d3.select("#homestart")
+          .transition()
+          // .delay(1000)
+          .duration(2000)
+          .attr('opacity', "0")
+          .attr('visible', false);
+        d3.select("#basecircle")
+          .transition()
+          .duration(500)
+          .attr('radius', 1);
+        d3.select("a-cursor")
+          .transition()
+          .duration(1000)
+          .attr('opacity', .25);
+      };
+      var returnHome = function() {
+        viewingScene = false;
+        d3.select("#basecircle")
+          .transition()
+          .delay(300)
+          .duration(2000)
+          .attr('radius', 7);
+        menuSelect = setTimeout(function(){
+          d3.selectAll(".menuObject")
+               .transition()
+               .duration(1000)
+               .delay(500)
+            .attr("position", "0 0 0");
+          d3.select("#videoSphere")
+            .attr('src', "#cityVideo")
+            .attr('visible', false)
+            .attr('opacity', 0);
+          d3.select("#homestart")
+            .transition()
+            .duration(2000)
+            .attr('opacity', "1")
+            .attr('visible', true);
+          d3.select("a-cursor")
+            .transition()
+            .duration(500)
+            .attr('opacity', 1);
+        }, 2000);
+        };
+      var data = "mountains";
+      
+      var menuSelect;
+      d3.select("#miniMt")
+          .on("mouseenter", function() {
+            d3.selectAll("#miniMt")
+                 .transition()
+                 .duration(2000)
+                 .attrTween('position', function() { //attrTween - transform to move elem
+                   return d3.interpolate('0 0 0', '0 -1 0'); //makes it go down
+                 })
+                 .append(data);
+            d3.select("a-cursor")
+              .transition()
+              .duration(1000)
+              .attr('color', "green");
+            d3.selectAll(".mmt")
+              .attr('color', "green");
+            menuSelect = setTimeout(function(){ openScene(); }, 1000);
+        })
+          .on("mouseleave", function() {
+            d3.selectAll("#miniMt")
+                 .transition()
+                 .duration(1200)
+                 .attr('position', '0 0 0');
+            d3.select("a-cursor")
+              .transition()
+              .duration(1000)
+              .attr('color', "white");
+            d3.selectAll(".mmt")
+              .attr('color', "gray");
+            clearTimeout(menuSelect);
+          });
+      
+      
+      d3.select("#miniTree")
+          .on("mouseenter", function() {
+            d3.selectAll("#miniTree")
+                 .transition()
+                 .duration(2000)
+                 .attrTween('position', function() {
+                   return d3.interpolate('0 0 0', '0 -1 0'); 
+                 });
+            d3.select("a-cursor")
+              .transition()
+              .duration(2000)
+              .attr('color', "green");
+            d3.selectAll(".leaf")
+              .attr('color', "orange");
+            menuSelect = setTimeout(function(){ openScene(); }, 1000);
+        })
+          .on("mouseleave", function() {
+            d3.selectAll("#miniTree")
+                 .transition()
+                 .duration(1200)
+                 .attr('position', '0 0 0');
+            d3.select("a-cursor")
+              .transition()
+              .duration(1000)
+              .attr('color', "white");
+            d3.selectAll(".leaf")
+              .attr('color', "green");
+            clearTimeout(menuSelect);
+          });
+      
+      
+      d3.select("#bottomMenu")
+          .on("mouseenter", returnHome)
+          .on("mouseleave", function() {
+            d3.select("#basecircle")
+              .transition()
+              .delay(250)
+              .duration(2000)
+              .attr('radius', 1);
+            clearTimeout(menuSelect);
+          });
+      
+      
+      var sceneUI = d3.select('#sceneMenu');
+      sceneUI.on('sceneChoice', sceneChoice);  // Custom event
+      function sceneChoice () {
+        // Move the menu-panes up by moving the parent
+        var UIelement = d3.select(this);
+        UIelement.transition()
+                 .duration(1200)
+                 .delay(500)
+                 .attrTween('position', function() {
+                   return d3.interpolate('0 -10 0', '0 0 0');
+                 });
+
+        // Increase opacity for all menu-panes individually
+        var menuPanes = d3.selectAll('.menu-pane');
+        menuPanes.transition()
+                 .duration(1200)
+                 .delay(500)
+                 .attr('opacity', '1');
+      }
+      sceneUI.dispatch('sceneChoice');  // Trigger custom event
+      
+//         //Video switching
+        var myvid = document.getElementById('cityVideo');
+
+        var loadVideo = function() {
+          myvid.addEventListener('ended', function(e) {
+            d3.select("#videoSphere").attr('src', "#cityVideo").attr('visible', false);
+            d3.select("#homestart")
+              .transition()
+              .duration(1000)
+              .attr('visible', true);
+          });
+        };
+     
+        //clock
+        AFRAME.registerComponent('clock', {
+          schema: {
+            position: {type: 'vec3', default: {x: -.75, y: 0.11, z: 0}},
+            rotation: {type: 'vec3', default: {x: -90, y: 0, z: 0}},
+            color: {type: 'color', default: '#0f0'},
+            font: {type: 'string', default: 'monoid'}
+          },
+          init: function () {
+            this.clockEl = document.createElement('a-text');
+            this.el.appendChild(this.clockEl); 
+            this.clockEl.setAttribute('position', this.data.position);
+            this.clockEl.setAttribute('rotation', this.data.rotation);
+            this.clockEl.setAttribute('color', this.data.color);
+            this.clockEl.setAttribute('font', this.data.font);
+          },
+          tick: function(){
+            this.clockEl.setAttribute('value', this.getTime());
+          }, 
+          getTime: function() {
+              var d = new Date();
+              return d.toLocaleTimeString();
+          }  
+        });
+      
+        // var pos = document.querySelector('#camera').getAttribute('position');
+        var hasMoved = false;
+      
+        var cameraEl = document.querySelector('#camera');
+        // var worldPos = new THREE.Vector3();
+        // worldPos.setFromMatrixPosition(cameraEl.object3D.matrixWorld);
+        // console.log(worldPos.x);
+//       
+        cameraEl.addEventListener('componentchanged', function (evt) {
+          // if (evt.detail.name !== 'position') { return; }
+          // console.log(evt.detail.newData);
+          // console.log(evt.detail.name);
+          if(!hasMoved) {
+              d3.select("a-cursor")
+                .transition()
+                .duration(2000)
+                .attr('opacity', 1);
+              hasMoved = true;
+          }
+          rotationNow = cameraEl.getAttribute("rotation");
+          if(Math.abs(Math.abs(rotation1sBefore['x']) - Math.abs(rotationNow['x']))>20 || 
+             Math.abs(Math.abs(rotation1sBefore['y']) - Math.abs(rotationNow['y']))>20 ) {
+            // fastHead = setTimeout(function(){
+            //   returnHome2();
+            // },490);
+            if(!showingCalm) {
+              showCalm(function(){
+                hideCalm(function(){
+                  delayCalm();
+                });
+              });
+            }
+          }
+        });
+        
+        var viewingScene = false;
+        var showingCalm = false;
+        var showCalm = function (callback){
+            showingCalm = true;
+            console.log("toofast");
+            d3.select("#videoSphere")
+              .transition()
+              .duration(1500)
+              .attr('opacity', "0");
+            d3.select("#calmSlide")
+              .transition()
+              .duration(1500)
+              .attrTween('position', function() {
+                return d3.interpolate('0 -100 0', '0 0 0');
+              });
+            callback();
+        };
+        var hideCalm = function (callback){
+            d3.select("#videoSphere")
+              .transition()
+              .delay(2000)
+              .duration(1500)
+              .attr('opacity', "1");
+            d3.select("#calmSlide")
+              .transition()
+              .delay(2000)
+              .duration(1500)
+              .attrTween('position', function() {
+                return d3.interpolate('0 0 0', '0 -100 0');
+              });
+            callback();
+        };
+        var delayCalm = function (){
+          setTimeout(function(){
+            showingCalm = false;
+          },4000);
+        };
+      
+        var rotation1sBefore;
+        var rotationNow = cameraEl.getAttribute("rotation");
+        var fastHead;
+        setInterval(function() {
+          clearTimeout(fastHead);
+          // Get your new lat and lng values from somewhere
+          rotation1sBefore = rotationNow;
+
+          // Now set them on the markers array (this is a very brief example)
+          rotationNow = cameraEl.getAttribute("rotation");
+          // console.log(rotationNow['x']);
+        }, 1 * 500 /* interval is in milliseconds */ );
+      
+      
+    </script>
+  </body>
+</html>
