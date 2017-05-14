@@ -7,7 +7,9 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
     <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>    
+    <script src="https://unpkg.com/aframe-outline@%5E1.1.0/build/aframe-outline.min.js"></script>
+
   </head>
   <body>
     <a-scene>
@@ -47,6 +49,13 @@
         </a-entity>
 
       </a-entity> <!-- End homeMenu -->
+      
+      <!-- Visual Add-ons -->
+      <a-entity id="visualQueues">
+        <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7" visible = "false"></a-entity>
+        <a-entity id="snow" particle-system="preset:snow;particleCount:2500; color: #fcffb7" visible = "false"></a-entity>
+        <a-entity id="rain" particle-system="preset:rain; color: #fcffb7" visible = "false"></a-entity>
+      </a-entity>  
 
       <a-camera id="camera">
         <a-cursor color="white" opacity="0"></a-cursor>
@@ -100,7 +109,13 @@
       var database = firebase.database();
 
       var dbRef = firebase.database().ref('/');
+      var currentState;
       dbRef.on('value', function(snapshot) {
+        // var outputValue;
+        // if(snapshot.val()>.5) {outputValue = 1;} else {outputValue=0}
+
+        // onDBUpdate(outputValue);
+        currentState = snapshot.val();
         onDBUpdate(snapshot.val());
       });
 
@@ -108,6 +123,7 @@
         console.log(val);
       }
       
+      var 
       
       var openForest = function () {
         openScene();
@@ -200,7 +216,13 @@
           .attr('opacity', .25);
         setTimeout("changeAudio()", 8000);
         setTimeout("changeAudio()", 11000);
-        setTimeout("changeAudio()", 14000);          
+        setTimeout("changeAudio()", 14000);
+        d3.select("#dust")
+          .attr('visible', true);
+        d3.select("#snow")
+          .attr('visible', true);
+        d3.select("#rain")
+          .attr('visible', true);                       
       };
       var justReturned = false;
       var returnHome = function() {
