@@ -92,7 +92,6 @@
 // music
       // init call -- for infinite loop setup
       var initCall = true;
-
       // array of overlapping music
       var audio = new Array(
         new Audio('asset/music/1ambiance.wav'),
@@ -100,13 +99,11 @@
         new Audio('asset/music/3harmony.wav'),
         new Audio('asset/music/5choir.wav'),
       );
-
       // distraction music
       var distraction = new Audio('asset/music/4piano.wav');
-      
       // variable used to keep track of music that is already overlayed
       var currCounter = 1;
-      
+
       var audioFunc = function() { 
         if (initCall) {
           setUpAudio();
@@ -149,10 +146,9 @@
           currCounter++;
         }
       };
-// end music functions
-      
+
       var openScene = function () {
-        audioFunc();
+        setTimeout("audioFunc()", 5000);
         viewingScene = true;
         d3.select("#homeMenu")
           .transition()
@@ -167,10 +163,11 @@
           .transition()
           .duration(1000)
           .attr('opacity', .25);
-        setTimeout("changeAudio()", 3000);
-        setTimeout("changeAudio()", 6000);
-        setTimeout("changeAudio()", 9000);          
+        setTimeout("changeAudio()", 8000);
+        setTimeout("changeAudio()", 11000);
+        setTimeout("changeAudio()", 14000);          
       };
+
       var returnHome = function() {
         audioFunc();
         viewingScene = false;
