@@ -177,6 +177,7 @@
         new Audio('https://cdn.glitch.com/b4f4d521-4cdc-400e-a428-c1b11013cb06%2F3harmony.aac?1494793526732'),
         new Audio('https://cdn.glitch.com/b4f4d521-4cdc-400e-a428-c1b11013cb06%2F5choir.aac?1494793523839')
       );
+      audio[0].volume = 0.8;
       // distraction music
       var distraction = new Audio('https://cdn.glitch.com/b4f4d521-4cdc-400e-a428-c1b11013cb06%2F4piano.aac?1494793523482');
       // variable used to keep track of music that is already overlayed
@@ -253,6 +254,7 @@
           .transition()
           .attr('opacity', .25);
         startTime();
+        audioFunc();
       };
 
       setInterval(function(){relax(visualTracker)}, 9000);
@@ -303,7 +305,7 @@
             if(distract){
               distraction.pause();
               distraction.currentTime = 0;
-              audioFunc();
+              // audioFunc();
             } else {
               if (visualTracker%2){
                 changeVisual();
@@ -320,8 +322,8 @@
       var returnHome = function() {
         console.log("return home" + viewingScene);
         if (viewingScene) {
-          audioFunc();
-          // stopAudio();
+          // audioFunc();
+          stopAudio();
           // distraction.play();
           stopVisual();
           visualTracker = 1;
