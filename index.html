@@ -62,8 +62,8 @@
 
       <!-- Visual Add-ons -->
       <a-entity id="visualQueues">
-        <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7" visible = "false"></a-entity>
-        <a-entity id="snow" particle-system="preset:snow;particleCount:2500; color: #fcffb7" visible = "false"></a-entity>
+        <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 6000;color: #fcffb7" visible = "false"></a-entity>
+        <a-entity id="snow" particle-system="preset:snow;particleCount:2000; color: #fcffb7" visible = "false"></a-entity>
         <a-entity id="rain" particle-system="preset:rain; color: #fcffb7" visible = "false"></a-entity>
       </a-entity>
 
@@ -172,13 +172,13 @@
       var initCall = true;
       // array of overlapping music
       var audio = new Array(
-        new Audio('asset/music/1ambiance.wav'),
-        new Audio('asset/music/2drone.wav'),
-        new Audio('asset/music/3harmony.wav'),
-        new Audio('asset/music/5choir.wav'),
+        new Audio('asset/music/1ambiance.mp3'),
+        new Audio('asset/music/2drone.mp3'),
+        new Audio('asset/music/3harmony.mp3'),
+        new Audio('asset/music/5choir.mp3'),
       );
       // distraction music
-      var distraction = new Audio('asset/music/4piano.wav');
+      var distraction = new Audio('asset/music/4piano.mp3');
       // variable used to keep track of music that is already overlayed
       var currCounter = 1;
 
