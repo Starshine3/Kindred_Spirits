@@ -92,29 +92,31 @@
 // music
       var initCall = true;
       var audio = new Array(
-        new Audio('asset/music/1rain.wav'),
+        new Audio('asset/music/1ambiance.wav'),
         new Audio('asset/music/2drone.wav'),
         new Audio('asset/music/3harmony.wav'),
-        new Audio('asset/music/4piano.wav'),
+        new Audio('asset/music/5piano.wav'),
       );
+
+      var distraction = new Audio('asset/music/4piano.wav');
       // variable used to keep track of music that is already overlayed
       var currCounter = 1;
       
       var audioFunc = function() { 
         if (initCall) {
           setUpAudio();
-          initCall = false;
-          audio[0].play();
         } 
         if (audio[0].paused) {
-          for(i = 0; i < (currCounter - 1); i++){
+          for(i = 0; i < currCounter; i++){
             audio[i].play()
           }
         } else {
-          for(i = 0; i < (currCounter - 1); i++){
+          for(i = 0; i < currCounter; i++){
             audio[i].pause()
             audio[i].currentTime = 0;
           }
+          currCounter = 1;
+          initCall = true;
         }
       };
       
@@ -130,6 +132,8 @@
             }, false);
           } 
         } 
+        initCall = false;
+        audio[0].play();
       };
       
       var changeAudio = function() {
