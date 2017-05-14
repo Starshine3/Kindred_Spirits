@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hello, WebVR! - A-Frame</title>
-    <meta name="description" content="Hello, WebVR! - A-Frame">
+    <title>Kindred Spirits</title>
+    <meta name="description" content="Meet Your Spirit Guide">
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
     <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>    
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
     <script src="https://unpkg.com/aframe-outline@%5E1.1.0/build/aframe-outline.min.js"></script>
 
   </head>
   <body>
+
+    <!-- Status Bar -->
+<!--     <div class="status">
+      <div id="time" style="height: 30px; width: 30px;"></div>
+      <div id="meditationTime" style="height: 30px; width: 30px;">You've meditated for xxx</div>
+      <div id="concentrationLevel" style="height: 30px; width: 30px;">digifhgfihgihf</div>
+    </div>
+ -->
+    <!-- Aframe -->
     <a-scene>
+      <!-- Assets -->
       <a-assets>
         <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
         <img id="home" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2FReflectionLakeMtRainier.jpg?1494687013750">
-        <img id="mountains" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Fmountain.jpg?1494725143728">
+        <img id="mountains" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Fmountain1.jpg?1494774062565">
         <img id="forest" crossorigin="anonymous" src="https://cdn.glitch.com/c3bd1375-3b63-463a-8805-0d6554429d7a%2Fforest_draft_compressed.jpg?1494723232566">
       </a-assets>
 
@@ -26,7 +36,7 @@
       <a-entity id="homeMenu">
         <!-- Welcome Text -->
         <a-text position="-1 2.5 -2" color="white" value="Welcome!" scale="2 2 2"></a-text>
-        <a-text position="-1.25 2 -2" color="white" value="Where would you like to meditate today?" scale=".75 .75 .75"></a-text>
+        <a-text position="-1.29 2 -2" color="white" value="Where would you like to meditate today?" scale=".75 .75 .75"></a-text>
 
       <!-- Menu Icons -->
         <a-entity id="sceneMenu" opacity="0" position="0 -20 0" scale="1 1 1" rotation="" visible="">
@@ -49,24 +59,26 @@
         </a-entity>
 
       </a-entity> <!-- End homeMenu -->
-      
+
       <!-- Visual Add-ons -->
       <a-entity id="visualQueues">
         <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7" visible = "false"></a-entity>
         <a-entity id="snow" particle-system="preset:snow;particleCount:2500; color: #fcffb7" visible = "false"></a-entity>
         <a-entity id="rain" particle-system="preset:rain; color: #fcffb7" visible = "false"></a-entity>
-      </a-entity>    
+      </a-entity>
 
       <a-camera id="camera">
         <a-cursor color="white" opacity="0"></a-cursor>
         <a-entity id="calmSlide" position="0 -100 0" opacity="0">
-<!--           <a-plane width="10" height="10"
-                   rotation="-30 0 0" position=".349 -.06 -.06"
-                   color="#7BC8A4"></a-plane> -->
-          <a-text id="calmtext" rotation="-11.11 0.401 -0.057" position="-0.07 .02 -.094"  scale="0.25 0.25 0.25"
+        <a-text id="calmtext" rotation="-11.11 0.401 -0.057" position="-0.07 .02 -.094"  scale="0.25 0.25 0.25"
                   value="calm" color="#ddd"></a-text>
         </a-entity>
       </a-camera>
+
+      <a-entity camera look-controls>
+        <a-text id="time" scale="0.3 0.3 0.3" position="-1 0 -1"
+                  value="clock" color="#fff"></a-text>
+      </a-entity>
 
       <a-entity id="bottomMenu">
         <!--  Clock -->
@@ -78,9 +90,11 @@
         <!--  Clock -->
         <a-entity clock="font: sourcecodepro; color: #191;"></a-entity>
       </a-entity>
-    </a-scene>  
+    </a-scene>
+
     <script>
-      
+      var viewingScene = false;
+      //Firebase initialization
       var config = {
                   apiKey: "AIzaSyAi_j5zE2Safbb-pQwJ2y9jSC-SW3t-AGo",
                   authDomain: "hackvr-f2bdb.firebaseapp.com",
@@ -98,7 +112,7 @@
         var errorMessage = error.message;
         // ...
       });
-      
+
       // Get a reference to the database service
       var database = firebase.database();
 
@@ -115,6 +129,26 @@
 
       var onDBUpdate = function (val ) {
         console.log(val);
+      }
+
+      /* Fixed Clock*/
+      function startTime() {
+        var today = new Date();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        var currTime = h + ":" + m + ":" + s;
+        d3.select("#time")
+          .attr('value', currTime);
+        // document.getElementById('time').innerHTML =
+        // h + ":" + m + ":" + s;
+        var t = setTimeout(startTime, 500);
+      }
+      function checkTime(i) {
+          if (i < 10) {i = "0" + i};
+          return i;
       }
 
       var openForest = function () {
@@ -148,7 +182,7 @@
       // variable used to keep track of music that is already overlayed
       var currCounter = 1;
 
-      var audioFunc = function() { 
+      var audioFunc = function() {
         if (initCall) {
           setUpAudio()
         } else {
@@ -177,25 +211,25 @@
           audio[i].currentTime = 0
         }
         currCounter = 1
-        initCall = true        
+        initCall = true
       }
-      
+
       var setUpAudio = function() {
-        for(i = 0; i < audio.length; i++) { 
+        for(i = 0; i < audio.length; i++) {
           if (typeof audio[i].loop == 'boolean')
-          {  
+          {
             audio[i].loop = true
           } else {
             audio[i].addEventListener('ended', function() {
             this.currentTime = 0;
             this.play();
             }, false)
-          } 
-        } 
+          }
+        }
         initCall = false
         audio[0].play()
       };
-      
+
       var changeAudio = function() {
         //use indicator to choose music
         if(currCounter < audio.length) {
@@ -204,21 +238,21 @@
         }
       };
 // end of music functions
-
       var visualTracker = 1;
       var openScene = function () {
         viewingScene = true;
-        d3.select("#homeMenu")
-          .transition()
-          .attr('opacity', "0")
-          .attr('visible', false);
         d3.select("#basecircle")
           .transition()
           .duration(500)
           .attr('radius', 1);
+        d3.select("#homeMenu")
+          .transition()
+          .attr('opacity', "0")
+          .attr('visible', false);
         d3.select("a-cursor")
           .transition()
-          .attr('opacity', .25);                 
+          .attr('opacity', .25);
+        startTime();
       };
 
       setInterval("relax(visualTracker)", 3000);
@@ -228,7 +262,7 @@
       var changeVisual = function() {
         if(visualNumber == 1) {
           d3.select("#dust")
-            .attr('visible', true);         
+            .attr('visible', true);
         }
         if(visualNumber == 2) {
           d3.select("#snow")
@@ -238,7 +272,7 @@
           d3.select("#rain")
             .attr('visible', true);
         }
-        visualNumber++;        
+        visualNumber++;
       }
 
       //Removes all visuals from screen
@@ -248,7 +282,7 @@
         d3.select("#snow")
           .attr('visible', false);
         d3.select("#rain")
-          .attr('visible', false); 
+          .attr('visible', false);
         visualNumber = 0;
       }
 // end of Visual Add-on controls
@@ -267,7 +301,7 @@
             if(distract){
               distraction.pause();
               distraction.currentTime = 0;
-              audioFunc();            
+              audioFunc();
             } else {
               if (visualTracker%2){
                 changeVisual();
@@ -281,60 +315,57 @@
       }
 // end of interval functions
 
-      var justReturned = false;
       var returnHome = function() {
-        audioFunc();
-        //stopAudio();
-        distraction.play();
-        stopVisual();
-        visualTracker = 0;        
-        justReturned = true;
-        viewingScene = false;
-        d3.select("#basecircle")
-          .transition()
-          .delay(300)
-          .duration(1000)
-          .attr('radius', 9);
-        menuSelect = setTimeout(function(){
-          d3.selectAll(".menuObject")
-               .transition()
-               .duration(1000)
-               .delay(500)
-            .attr("position", "0 0 0");
-          d3.select("#homeScreen")
-            .attr('src', "#home")
-            .attr('visible', true)
-            .attr('opacity', 1);
-          d3.select("#homeMenu")
+        console.log("return home" + viewingScene);
+        if (viewingScene) {
+          audioFunc();
+          //stopAudio();
+          distraction.play();
+          stopVisual();
+          visualTracker = 0;
+          menuSelect = setTimeout(function(){
+            d3.selectAll(".menuObject")
+                 .transition()
+                 .duration(1000)
+                 .delay(500)
+              .attr("position", "0 0 0");
+            d3.select("#homeScreen")
+              .attr('src', "#home")
+              .attr('visible', true)
+              .attr('opacity', 1);
+            d3.select("#homeMenu")
+              .transition()
+              .duration(2000)
+              .attr('opacity', "1")
+              .attr('visible', true);
+            d3.select("#basecircle")
             .transition()
-            .duration(2000)
-            .attr('opacity', "1")
-            .attr('visible', true);
-          d3.select("a-cursor")
-            .transition()
-            .attr('opacity', 1);
-        }, 2000);
+            .delay(300)
+            .duration(1000)
+            .attr('radius', 9);
+            d3.select("a-cursor")
+              .transition()
+              .attr('opacity', 1);
+            viewingScene = false;
+          }, 2000);
+        }
+
         };
 
       var menuSelect;
       d3.select("#miniMt")
           .on("mouseenter", function() {
-            if (!justReturned) {
-              d3.selectAll("#miniMt")
-                 .transition()
-                 .duration(800)
-                 .attrTween('position', function() {
-                   return d3.interpolate('0 0 0', '0 -1.5 0');
-                 });
+            d3.selectAll("#miniMt")
+               .transition()
+               .duration(800)
+               .attrTween('position', function() {
+                 return d3.interpolate('0 0 0', '0 -1.5 0');});
             d3.select("a-cursor")
               .transition()
               .attr('color', "green");
             d3.selectAll(".mmt")
               .attr('color', "green");
             menuSelect = setTimeout(function(){ openMountains(); }, 600);
-            } else {
-              justReturned = false;
-            }
         })
           .on("mouseleave", function() {
             d3.selectAll("#miniMt")
@@ -380,11 +411,11 @@
       d3.select("#bottomMenu")
           .on("mouseenter", returnHome)
           .on("mouseleave", function() {
-            d3.select("#basecircle")
-              .transition()
-              .delay(250)
-              .duration(2000)
-              .attr('radius', 1);
+            // d3.select("#basecircle")
+            //   .transition()
+            //   .delay(250)
+            //   .duration(2000)
+            //   .attr('radius', 1);
             clearTimeout(menuSelect);
           });
 
@@ -456,8 +487,6 @@
             }
           }
         });
-
-        var viewingScene = false;
         var showingCalm = false;
         var showCalm = function (callback){
             showingCalm = true;
