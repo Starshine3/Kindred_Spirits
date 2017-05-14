@@ -184,21 +184,21 @@
 
       var audioFunc = function() {
         if (initCall) {
-          setUpAudio()
+          setUpAudio();
         } else {
           if (audio[0].paused) {
             for(i = 0; i < currCounter; i++) {
-              audio[i].play()
+              audio[i].play();
             }
           } else {
             distraction.pause();
             audio[0].pause();
             for(i = 0; i < audio.length; i++) {
-              audio[i].pause()
-              audio[i].currentTime = 0
+              audio[i].pause();
+              audio[i].currentTime = 0;
             }
-            currCounter = 1
-            initCall = true
+            currCounter = 1;
+            initCall = true;
           }
         }
       };
@@ -207,18 +207,18 @@
         distraction.pause();
         audio[0].pause();
         for(i = 0; i < audio.length; i++) {
-          audio[i].pause()
-          audio[i].currentTime = 0
+          audio[i].pause();
+          audio[i].currentTime = 0;
         }
-        currCounter = 1
-        initCall = true
+        currCounter = 1;
+        initCall = true;
       }
 
       var setUpAudio = function() {
         for(i = 0; i < audio.length; i++) {
           if (typeof audio[i].loop == 'boolean')
           {
-            audio[i].loop = true
+            audio[i].loop = true;
           } else {
             audio[i].addEventListener('ended', function() {
             this.currentTime = 0;
@@ -226,15 +226,15 @@
             }, false)
           }
         }
-        initCall = false
-        audio[0].play()
+        initCall = false;
+        audio[0].play();
       };
 
       var changeAudio = function() {
         //use indicator to choose music
         if(currCounter < audio.length) {
-          audio[currCounter].play()
-          currCounter++
+          audio[currCounter].play();
+          currCounter++;
         }
       };
 // end of music functions
