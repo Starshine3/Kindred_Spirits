@@ -104,6 +104,57 @@
           .duration(1000)
           .attr('opacity', .25);
       };
+
+// music
+      var initCall = true;
+      var audio = new Array(
+        new Audio('asset/music/1rain.wav'),
+        new Audio('asset/music/2drone.wav'),
+        new Audio('asset/music/3harmony.wav'),
+        new Audio('asset/music/4piano.wav'),
+      );
+      // variable used to keep track of music that is already overlayed
+      var currCounter = 1;
+      
+      var audioFunc = function() { 
+        if (initCall) {
+          setUpAudio();
+          initCall = false;
+          audio[0].play();
+        } 
+        if (audio[0].paused) {
+          for(i = 0; i < (currCounter - 1); i++){
+            audio[i].play()
+          }
+        } else {
+          for(i = 0; i < (currCounter - 1); i++){
+            audio[i].pause()
+            audio[i].currentTime = 0;
+          }
+        }
+      };
+      
+      var setUpAudio = function() {
+        for(i = 0; i < audio.length; i++){ 
+          if (typeof audio[i].loop == 'boolean')
+          {  
+            audio[i].loop = true;
+          } else {
+            audio[i].addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+            }, false);
+          } 
+        } 
+      };
+      
+      var changeAudio = function() {
+        //use indicator to choose music
+        if(currCounter < audio.length) {
+          audio[currCounter].play();
+          currCounter++;
+        }
+      };
       var returnHome = function() {
         viewingScene = false;
         d3.select("#basecircle")
@@ -132,6 +183,7 @@
             .attr('opacity', 1);
         }, 2000);
         };
+// end music functions
 
       var menuSelect;
       d3.select("#miniMt")
