@@ -5,7 +5,7 @@ A Social Meditation Virtual Reality (VR) web app that uses EEG data (which measu
 ## Deployment
 * Can be viewed on Mobile & Computer
 
-Demo:
+**Demo:**
 ```
 https://somber-record.glitch.me
 ```
