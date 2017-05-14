@@ -175,7 +175,7 @@
         new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/1ambiance.aac'),
         new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/2drone.aac'),
         new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/3harmony.aac'),
-        new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/5choir.aac'),
+        new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/5choir.aac')
       );
       // distraction music
       var distraction = new Audio('https://github.com/Starshine3/Kindred_Spirits/tree/master/asset/music/4piano.aac');
@@ -255,7 +255,7 @@
         startTime();
       };
 
-      setInterval("relax(visualTracker)", 3000);
+      setInterval("relax(visualTracker)", 9000);
 
 // Controls the Visual Add-ons
       var visualNumber = 1;
@@ -292,10 +292,10 @@
       var relax = function() {
         if (viewingScene){
           if(currentState < 0.5) {
-            stopAudio();
+            // stopAudio();
             distraction.play();
-            stopVisual();
-            visualTracker = 0;
+            // stopVisual();
+            // visualTracker = 0;
             distract = true;
           } else {
             if(distract){
@@ -319,10 +319,10 @@
         console.log("return home" + viewingScene);
         if (viewingScene) {
           audioFunc();
-          //stopAudio();
-          distraction.play();
+          // stopAudio();
+          // distraction.play();
           stopVisual();
-          visualTracker = 0;
+          visualTracker = 1;
           menuSelect = setTimeout(function(){
             d3.selectAll(".menuObject")
                  .transition()
