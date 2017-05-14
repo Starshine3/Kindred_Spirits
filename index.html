@@ -55,7 +55,7 @@
         <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7" visible = "false"></a-entity>
         <a-entity id="snow" particle-system="preset:snow;particleCount:2500; color: #fcffb7" visible = "false"></a-entity>
         <a-entity id="rain" particle-system="preset:rain; color: #fcffb7" visible = "false"></a-entity>
-      </a-entity>  
+      </a-entity>    
 
       <a-camera id="camera">
         <a-cursor color="white" opacity="0"></a-cursor>
@@ -78,13 +78,7 @@
         <!--  Clock -->
         <a-entity clock="font: sourcecodepro; color: #191;"></a-entity>
       </a-entity>
-    </a-scene>
-
-    <a-entity id="particles">
-      <a-entity position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7"></a-entity>
-      <a-entity particle-system="preset:snow;particleCount:2500; color: #fcffb7"></a-entity>
-      <a-entity particle-system="preset:rain; color: #fcffb7"></a-entity>
-    </a-entity>    
+    </a-scene>  
     <script>
       
       var config = {
@@ -122,8 +116,6 @@
       var onDBUpdate = function (val ) {
         console.log(val);
       }
-      
-      var 
       
       var openForest = function () {
         openScene();
