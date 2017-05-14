@@ -88,22 +88,6 @@
           .attr('opacity', "1");
         openScene();
       };
-      var openScene = function () {
-        viewingScene = true;
-        d3.select("#homeMenu")
-          .transition()
-          .duration(1000)
-          .attr('opacity', "0")
-          .attr('visible', false);
-        d3.select("#basecircle")
-          .transition()
-          .duration(1000)
-          .attr('radius', 1);
-        d3.select("a-cursor")
-          .transition()
-          .duration(1000)
-          .attr('opacity', .25);
-      };
 
 // music
       var initCall = true;
@@ -155,7 +139,30 @@
           currCounter++;
         }
       };
+// end music functions
+      
+      var openScene = function () {
+        audioFunc();
+        viewingScene = true;
+        d3.select("#homeMenu")
+          .transition()
+          .duration(1000)
+          .attr('opacity', "0")
+          .attr('visible', false);
+        d3.select("#basecircle")
+          .transition()
+          .duration(1000)
+          .attr('radius', 1);
+        d3.select("a-cursor")
+          .transition()
+          .duration(1000)
+          .attr('opacity', .25);
+        setTimeout("changeAudio()", 3000);
+        setTimeout("changeAudio()", 6000);
+        setTimeout("changeAudio()", 9000);          
+      };
       var returnHome = function() {
+        audioFunc();
         viewingScene = false;
         d3.select("#basecircle")
           .transition()
@@ -183,8 +190,6 @@
             .attr('opacity', 1);
         }, 2000);
         };
-// end music functions
-
       var menuSelect;
       d3.select("#miniMt")
           .on("mouseenter", function() {
