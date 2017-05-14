@@ -255,7 +255,7 @@
         startTime();
       };
 
-      setInterval("relax(" + visualTracker + ")", 9000);
+      setInterval(relax(visualTracker), 9000);
 
 // Controls the Visual Add-ons
       var visualNumber = 1;
@@ -290,8 +290,9 @@
 // Interval function!
       var distract = false;
       var relax = function() {
-        if (viewingScene){
+
           console.log(currentState);
+        if (viewingScene){
           if(currentState < 0.5) {
             // stopAudio();
             distraction.play();
