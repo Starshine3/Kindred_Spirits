@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Kindred Spirits</title>
-    <meta name="description" content="Meet Your Spirit Guide">
+    <meta name="description" content="Meet Your Spirit Guide. Meditate together.">
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
@@ -13,27 +13,29 @@
   </head>
   <body>
 
-    <!-- Status Bar -->
-<!--     <div class="status">
-      <div id="time" style="height: 30px; width: 30px;"></div>
-      <div id="meditationTime" style="height: 30px; width: 30px;">You've meditated for xxx</div>
-      <div id="concentrationLevel" style="height: 30px; width: 30px;">digifhgfihgihf</div>
-    </div>
- -->
     <!-- Aframe -->
     <a-scene>
       <!-- Assets -->
       <a-assets>
         <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
-        <img id="home" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2FReflectionLakeMtRainier.jpg?1494687013750">
+        
+        <img id="home" crossorigin="anonymous" src="https://ucarecdn.com/49e3feba-2eb8-412e-ae5c-951ba57164de/">
+        
+<!--    <img id="home" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2FReflectionLakeMtRainier.jpg?1494687013750"> -->
 <!--         <img id="mountains" crossorigin="anonymous" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Fmountain1.jpg?1494774062565"> -->
         <img id="forest" crossorigin="anonymous" src="https://ucarecdn.com/25f9d8bc-9fcd-4c57-9358-c64e47baa0c5/">
+      
+        <a-asset-item id="tree-obj" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Flowpolytree.obj?1494791569741"></a-asset-item>
+        <a-asset-item id="tree-mtl" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Flowpolytree.mtl?1494791569567"></a-asset-item>
+
+        <a-asset-item id="mtn-obj" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Flowpolymountains_v2.obj?1494792646643"></a-asset-item>
+        <a-asset-item id="mtn-mtl" src="https://cdn.glitch.com/c0053b46-e734-45e3-b54d-7b22d4c67c09%2Flowpolymountains_v2.mtl?1494792646683"></a-asset-item>
       </a-assets>
 
       <!-- Home Background -->
-      <a-sky id="homeScreen" src="#home"></a-sky>
+      <a-sky class="home" id="homeScreen" src="#home"></a-sky>
 
-      <a-entity id="homeMenu">
+      <a-entity class="home" id="homeMenu">
         <!-- Welcome Text -->
         <a-text position="-1 2.5 -2" color="white" value="Welcome!" scale="2 2 2"></a-text>
         <a-text position="-1.29 2 -2" color="white" value="Where would you like to meditate today?" scale=".75 .75 .75"></a-text>
@@ -42,19 +44,13 @@
         <a-entity id="sceneMenu" opacity="0" position="0 -20 0" scale="1 1 1" rotation="" visible="">
 
           <!-- Mountains -->
-          <a-entity id="miniMt" class="menuObject" position="0 0 0" scale=".9 .75 1" rotation="" visible="">
-              <a-cylinder radius="1.4" height="6" position="-2.6 0 -5" opacity="0" rotation="" scale="" visible="" material="" geometry=""></a-cylinder>
-              <a-cone class="mmt" scale="1 1 1" position="-2.6 1.35 -5" color="gray" radius-bottom="1" radius-top="0" height="2" opacity="1" rotation="" visible="" material="" geometry=""></a-cone>
-              <a-cone class="mmt" scale="1 1 1" position="-1.97 1.174 -4.5" color="gray" radius-bottom=".75" radius-top="0" height="1.4" opacity="1" rotation="" visible="" material="" geometry=""></a-cone>
+          <a-entity id="miniMt" class="menuObject" position="-2.5 .2 -4.5" scale=".2 .2. .2" visible="">
+            <a-entity obj-model="obj: #mtn-obj; mtl: #mtn-mtl"></a-entity>
           </a-entity>
 
           <!-- Trees -->
-          <a-entity id="miniTree" class="menuObject" position="" rotation="" scale="" visible="">
-            <a-cylinder radius="0.75" height="8" position="3 0 -5" opacity="0" rotation="" scale="" visible="" material="" geometry=""></a-cylinder>
-            <a-sphere class="leaf" radius=".5" position="3 1.5 -5" color="green" rotation="" scale="" visible="" material="" geometry=""></a-sphere>
-            <a-sphere class="leaf" radius=".4" position="2.5 1.25 -5" color="green" rotation="" scale="" visible="" material="" geometry=""></a-sphere>
-            <a-sphere class="leaf" radius="0.35" position="3.25 1.3 -5" color="green" rotation="" scale="" visible="" material="" geometry=""></a-sphere>
-            <a-cylinder radius="0.15" height="1" position="3 .7 -5" color="brown" rotation="" scale="" visible="" material="" geometry=""></a-cylinder>
+          <a-entity id="miniTree" class="menuObject" position="2.4 .7 -5" rotation="" scale=".35 .35 .35" visible="">
+            <a-entity obj-model="obj: #tree-obj; mtl: #tree-mtl"></a-entity>
           </a-entity>
         </a-entity>
 
@@ -76,14 +72,14 @@
       </a-camera>
 
       <a-entity camera look-controls>
-        <a-text id="time" scale="0.3 0.3 0.3" position="-1 0 -1"
-                  value="clock" color="#fff"></a-text>
+<!--         <a-text id="time" scale="0.3 0.3 0.3" position="-1 0 -1"
+                  value="clock" color="#fff"></a-text> -->
       </a-entity>
 
       <a-entity id="bottomMenu">
         <!--  Clock -->
         <a-entity clock="font: sourcecodepro; color: #191;"></a-entity>
-        <a-circle id="basecircle" radius="9" color="#7BC8A4" position="0 0.1 0" rotation="-90 0 0"></a-circle>
+        <a-circle id="basecircle" radius="1" color="#7BC8A4" position="0 0.1 0" rotation="-90 0 0" visible="true"></a-circle>
       </a-entity>
 
       <a-entity id="sideMenu">
@@ -155,6 +151,7 @@
         openScene();
         d3.select("#homeScreen")
           .transition()
+          .duration(800)
           .attr('src', "#forest")
           .attr('visible', true)
           .attr('opacity', "1");
@@ -163,6 +160,7 @@
         openScene();
         d3.select("#homeScreen")
           .transition()
+          .duration(800)
           .attr('src', "#mountains")
           .attr('visible', true)
           .attr('opacity', "1");
@@ -242,17 +240,24 @@
       var visualTracker = 1;
       var openScene = function () {
         viewingScene = true;
-        d3.select("#basecircle")
-          .transition()
-          .duration(500)
-          .attr('radius', 1);
+        // d3.select("#basecircle")
+        //   .transition()
+        //   .duration(500)
+        //   .attr('radius', 1);
         d3.select("#homeMenu")
           .transition()
+          .duration(100)
           .attr('opacity', "0")
           .attr('visible', false);
         d3.select("a-cursor")
           .transition()
           .attr('opacity', .25);
+        d3.select("#homeScreen")
+          .transition()
+          .duration(600)
+          .attr('visible', false);
+        d3.select("#basecircle")
+          .attr('visible', true);
         startTime();
         audioFunc();
       };
@@ -326,13 +331,13 @@
           stopAudio();
           // distraction.play();
           stopVisual();
-          visualTracker = 1;
+          visualTracker = 0;
           menuSelect = setTimeout(function(){
-            d3.selectAll(".menuObject")
-                 .transition()
-                 .duration(1000)
-                 .delay(500)
-              .attr("position", "0 0 0");
+            // d3.selectAll(".menuObject")
+            //      .transition()
+            //      .duration(1000)
+            //      .delay(500)
+            //   .attr("position", "0 0 0");
             d3.select("#homeScreen")
               .attr('src', "#home")
               .attr('visible', true)
@@ -343,18 +348,19 @@
               .attr('opacity', "1")
               .attr('visible', true);
             d3.select("#basecircle")
-            .transition()
-            .delay(300)
-            .duration(1000)
-            .attr('radius', 9);
+              .transition()
+              .delay(300)
+              .duration(1000)
+              .attr('radius', 9)
+              .duration(1000)
+              .attr('radius', 1)
+              .attr('visibility', false);
             d3.select("a-cursor")
               .transition()
               .attr('opacity', 1);
             viewingScene = false;
           }, 2000);
-        }
-
-        };
+        }};
 
       var menuSelect;
       d3.select("#miniMt")
@@ -362,25 +368,20 @@
             d3.selectAll("#miniMt")
                .transition()
                .duration(800)
-               .attrTween('position', function() {
-                 return d3.interpolate('0 0 0', '0 -1.5 0');});
+               .attr('scale', ".35 .35 .35");
             d3.select("a-cursor")
               .transition()
               .attr('color', "green");
-            d3.selectAll(".mmt")
-              .attr('color', "green");
-            menuSelect = setTimeout(function(){ openMountains(); }, 600);
+            menuSelect = setTimeout(function(){ openMountains(); }, 800);
         })
           .on("mouseleave", function() {
             d3.selectAll("#miniMt")
                  .transition()
                  .duration(1000)
-                 .attr('position', '0 0 0');
+                 .attr('scale', ".2 .2 .2");
             d3.select("a-cursor")
               .transition()
               .attr('color', "white");
-            d3.selectAll(".mmt")
-              .attr('color', "gray");
             clearTimeout(menuSelect);
           });
 
@@ -389,26 +390,20 @@
             d3.selectAll("#miniTree")
                  .transition()
                  .duration(800)
-                 .attrTween('position', function() {
-                   return d3.interpolate('0 0 0', '0 -1.5 0');
-                 });
+                 .attr('scale', ".6 .6 .6");
             d3.select("a-cursor")
               .transition()
               .attr('color', "green");
-            d3.selectAll(".leaf")
-              .attr('color', "orange");
-            menuSelect = setTimeout(function(){ openForest(); }, 600);
+            menuSelect = setTimeout(function(){ openForest(); }, 800);
         })
           .on("mouseleave", function() {
             d3.selectAll("#miniTree")
                  .transition()
                  .duration(1000)
-                 .attr('position', '0 0 0');
+                 .attr('scale', ".4 .4 .4");
             d3.select("a-cursor")
               .transition()
               .attr('color', "white");
-            d3.selectAll(".leaf")
-              .attr('color', "green");
             clearTimeout(menuSelect);
           });
 
@@ -447,7 +442,7 @@
         //clock
         AFRAME.registerComponent('clock', {
           schema: {
-            position: {type: 'vec3', default: {x: -.75, y: 0.11, z: 0}},
+            position: {type: 'vec3', default: {x: -.57, y: 0.11, z: 0}},
             rotation: {type: 'vec3', default: {x: -90, y: 0, z: 0}},
             color: {type: 'color', default: '#0f0'},
             font: {type: 'string', default: 'monoid'}
