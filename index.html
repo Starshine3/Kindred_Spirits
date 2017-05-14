@@ -5,6 +5,7 @@
     <meta name="description" content="Hello, WebVR! - A-Frame">
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
   </head>
   <body>
     <a-scene>
@@ -69,6 +70,38 @@
     </a-scene>
 
     <script>
+      
+      var config = {
+                  apiKey: "AIzaSyAi_j5zE2Safbb-pQwJ2y9jSC-SW3t-AGo",
+                  authDomain: "hackvr-f2bdb.firebaseapp.com",
+                  databaseURL: "https://hackvr-f2bdb.firebaseio.com",
+                  projectId: "hackvr-f2bdb",
+                  storageBucket: "hackvr-f2bdb.appspot.com",
+                  messagingSenderId: "961200201842"
+                };
+      firebase.initializeApp(config);
+
+
+      firebase.auth().signInAnonymously().catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+      });
+      
+      // Get a reference to the database service
+      var database = firebase.database();
+
+      var dbRef = firebase.database().ref('/');
+      dbRef.on('value', function(snapshot) {
+        onDBUpdate(snapshot.val());
+      });
+
+      var onDBUpdate = function (val ) {
+        console.log(val);
+      }
+      
+      
       var openForest = function () {
         openScene();
         d3.select("#homeScreen")
