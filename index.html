@@ -116,7 +116,7 @@
       var onDBUpdate = function (val ) {
         console.log(val);
       }
-      
+
       var openForest = function () {
         openScene();
         d3.select("#homeScreen")
@@ -168,6 +168,17 @@
           }
         }
       };
+
+      var stopAudio = function() {
+        distraction.pause();
+        audio[0].pause();
+        for(i = 0; i < audio.length; i++) {
+          audio[i].pause()
+          audio[i].currentTime = 0
+        }
+        currCounter = 1
+        initCall = true        
+      }
       
       var setUpAudio = function() {
         for(i = 0; i < audio.length; i++) { 
@@ -192,8 +203,10 @@
           currCounter++
         }
       };
+// end of music functions
+
+      var visualTracker = 1;
       var openScene = function () {
-        setTimeout("audioFunc()", 5000);
         viewingScene = true;
         d3.select("#homeMenu")
           .transition()
@@ -205,20 +218,76 @@
           .attr('radius', 1);
         d3.select("a-cursor")
           .transition()
-          .attr('opacity', .25);
-        setTimeout("changeAudio()", 8000);
-        setTimeout("changeAudio()", 11000);
-        setTimeout("changeAudio()", 14000);
-        d3.select("#dust")
-          .attr('visible', true);
-        d3.select("#snow")
-          .attr('visible', true);
-        d3.select("#rain")
-          .attr('visible', true);                       
+          .attr('opacity', .25);                 
       };
+
+      setInterval("relax(visualTracker)", 3000);
+
+// Controls the Visual Add-ons
+      var visualNumber = 1;
+      var changeVisual = function() {
+        if(visualNumber == 1) {
+          d3.select("#dust")
+            .attr('visible', true);         
+        }
+        if(visualNumber == 2) {
+          d3.select("#snow")
+            .attr('visible', true);
+        }
+        if(visualNumber == 3) {
+          d3.select("#rain")
+            .attr('visible', true);
+        }
+        visualNumber++;        
+      }
+
+      //Removes all visuals from screen
+      var stopVisual = function() {
+        d3.select("#dust")
+          .attr('visible', false);
+        d3.select("#snow")
+          .attr('visible', false);
+        d3.select("#rain")
+          .attr('visible', false); 
+        visualNumber = 0;
+      }
+// end of Visual Add-on controls
+
+// Interval function!
+      var distract = false;
+      var relax = function() {
+        if (viewingScene){
+          if(currentState < 0.5) {
+            stopAudio();
+            distraction.play();
+            stopVisual();
+            visualTracker = 0;
+            distract = true;
+          } else {
+            if(distract){
+              distraction.pause();
+              distraction.currentTime = 0;
+              audioFunc();            
+            } else {
+              if (visualTracker%2){
+                changeVisual();
+              } else {
+                changeAudio();
+              }
+            }
+            visualTracker++;
+          }
+        }
+      }
+// end of interval functions
+
       var justReturned = false;
       var returnHome = function() {
         audioFunc();
+        //stopAudio();
+        distraction.play();
+        stopVisual();
+        visualTracker = 0;        
         justReturned = true;
         viewingScene = false;
         d3.select("#basecircle")
