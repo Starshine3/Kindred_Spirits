@@ -6,6 +6,8 @@
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -69,6 +71,11 @@
       </a-entity>
     </a-scene>
 
+    <a-entity id="particles">
+      <a-entity position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7"></a-entity>
+      <a-entity particle-system="preset:snow;particleCount:2500; color: #fcffb7"></a-entity>
+      <a-entity particle-system="preset:rain; color: #fcffb7"></a-entity>
+    </a-entity>    
     <script>
       
       var config = {
