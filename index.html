@@ -85,7 +85,67 @@
           .attr('visible', true)
           .attr('opacity', "1");
       };
+// music
+      // init call -- for infinite loop setup
+      var initCall = true;
+      // array of overlapping music
+      var audio = new Array(
+        new Audio('asset/music/1ambiance.wav'),
+        new Audio('asset/music/2drone.wav'),
+        new Audio('asset/music/3harmony.wav'),
+        new Audio('asset/music/5choir.wav'),
+      );
+      // distraction music
+      var distraction = new Audio('asset/music/4piano.wav');
+      // variable used to keep track of music that is already overlayed
+      var currCounter = 1;
+
+      var audioFunc = function() { 
+        if (initCall) {
+          setUpAudio()
+        } else {
+          if (audio[0].paused) {
+            for(i = 0; i < currCounter; i++) {
+              audio[i].play()
+            }
+          } else {
+            distraction.pause();
+            audio[0].pause();
+            for(i = 0; i < audio.length; i++) {
+              audio[i].pause()
+              audio[i].currentTime = 0
+            }
+            currCounter = 1
+            initCall = true
+          }
+        }
+      };
+      
+      var setUpAudio = function() {
+        for(i = 0; i < audio.length; i++) { 
+          if (typeof audio[i].loop == 'boolean')
+          {  
+            audio[i].loop = true
+          } else {
+            audio[i].addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+            }, false)
+          } 
+        } 
+        initCall = false
+        audio[0].play()
+      };
+      
+      var changeAudio = function() {
+        //use indicator to choose music
+        if(currCounter < audio.length) {
+          audio[currCounter].play()
+          currCounter++
+        }
+      };
       var openScene = function () {
+        setTimeout("audioFunc()", 5000);
         viewingScene = true;
         d3.select("#homeMenu")
           .transition()
@@ -98,9 +158,13 @@
         d3.select("a-cursor")
           .transition()
           .attr('opacity', .25);
+        setTimeout("changeAudio()", 8000);
+        setTimeout("changeAudio()", 11000);
+        setTimeout("changeAudio()", 14000);          
       };
       var justReturned = false;
       var returnHome = function() {
+        audioFunc();
         justReturned = true;
         viewingScene = false;
         d3.select("#basecircle")
