@@ -5,6 +5,10 @@
     <meta name="description" content="Hello, WebVR! - A-Frame">
     <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+
+
   </head>
   <body>
     <a-scene>
@@ -53,6 +57,9 @@
                   value="calm" color="#ddd"></a-text>
         </a-entity>
       </a-camera>
+      <a-entity id="dust" position="1 1 1" particle-system="preset: dust; particleCount: 7500;color: #fcffb7"></a-entity>
+      <a-entity id="snow" particle-system="preset:snow;particleCount:2500; color: #fcffb7"></a-entity>
+      <a-entity id="rain" particle-system="preset:rain; color: #fcffb7"></a-entity>
 
       <a-entity id="bottomMenu">
         <!--  Clock -->
@@ -106,19 +113,21 @@
 
       var audioFunc = function() { 
         if (initCall) {
-          setUpAudio();
+          setUpAudio()
         } else {
           if (audio[0].paused) {
             for(i = 0; i < currCounter; i++) {
               audio[i].play()
             }
           } else {
-            for(i = 0; i < currCounter; i++) {
+            distraction.pause();
+            audio[0].pause();
+            for(i = 0; i < audio.length; i++) {
               audio[i].pause()
-              audio[i].currentTime = 0;
+              audio[i].currentTime = 0
             }
-            currCounter = 1;
-            initCall = true;
+            currCounter = 1
+            initCall = true
           }
         }
       };
@@ -127,23 +136,23 @@
         for(i = 0; i < audio.length; i++) { 
           if (typeof audio[i].loop == 'boolean')
           {  
-            audio[i].loop = true;
+            audio[i].loop = true
           } else {
             audio[i].addEventListener('ended', function() {
             this.currentTime = 0;
             this.play();
-            }, false);
+            }, false)
           } 
         } 
-        initCall = false;
-        audio[0].play();
+        initCall = false
+        audio[0].play()
       };
       
       var changeAudio = function() {
         //use indicator to choose music
         if(currCounter < audio.length) {
-          audio[currCounter].play();
-          currCounter++;
+          audio[currCounter].play()
+          currCounter++
         }
       };
 
@@ -414,6 +423,7 @@
           rotationNow = cameraEl.getAttribute("rotation");
           // console.log(rotationNow['x']);
         }, 1 * 500 /* interval is in milliseconds */ );
+
 
 
     </script>
