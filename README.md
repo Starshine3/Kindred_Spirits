@@ -21,4 +21,4 @@ https://somber-record.glitch.me
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 
-### Built as a part of the AT&T VR/AR Hackathon, May 2017.
+### 1st Place VR at AT&T VR/AR Hackathon, May 2017.
