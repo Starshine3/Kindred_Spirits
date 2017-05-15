@@ -13,7 +13,7 @@ https://somber-record.glitch.me
 ## Built With
 
 * [A-Frame](https://aframe.io/) - The web framework used
-* [Firebase](https://firebase.google.com/docs/) - Reads Realtime EEG data
+* [Firebase](https://firebase.google.com/docs/database/) - Reads Realtime EEG data into a database
 * [Muse](http://developer.choosemuse.com/) - Used to read EEG data
 
 ## Contributing
